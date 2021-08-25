@@ -33,7 +33,7 @@ class SportModal extends Component {
   };
 
   handleSubmit = ( e ) => {
-    e.preventDefault();
+
     const { nickname, favouriteleague, favTeamId, favTeamName, selectedSport } =
       this.state;
     console.log( nickname );
@@ -138,7 +138,8 @@ class SportModal extends Component {
         .catch( ( err ) => console.error( err ) );
     }
   };
-  getTeamsData = async ( value ) => {
+  getTeamsData = ( value ) => {
+
     if ( this.props.auth0.isAuthenticated ) {
       this.props.auth0
         .getIdTokenClaims()
@@ -352,10 +353,8 @@ function Step2( props ) {
                 data={props.allTeamsData}
                 dataKey='strAllteamId'
                 textField='teamNameDetails'
-                defaultValue={'Select League'}
-                as='button'
+                defaultValue={'Select team'}
                 onChange={props.getOneTeamData}
-                disabled={['', ' ']}
               />
             )}
           </Col>

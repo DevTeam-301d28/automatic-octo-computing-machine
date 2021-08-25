@@ -1,0 +1,21 @@
+
+
+
+@media only screen and (max-width: 550px) {
+  .c-ProfileSection {
+    font-size: 19px;
+  }
+  .c-ProfileSection__title {
+    font-size: 2.8em;
+  }
+  .c-ProfileSection__content {
+    min-width: unset;
+  }
+}
+
+.c-HeroSection__title {
+  margin-bottom: 15px;
+  font-size: 2.5em;
+  font-family: "Montserrat", sans-serif;
+}
+
