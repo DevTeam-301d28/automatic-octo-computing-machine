@@ -5,7 +5,7 @@ import ScrollOnView from '../../common/ScrollOnView';
 import { withAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Card } from 'react-bootstrap';
 
 class Players extends Component {
   constructor( props ) {
@@ -21,7 +21,9 @@ class Players extends Component {
     console.log( userInfo );
     try {
       let axiosResponse = await axios.get(
-        `http://localhost:3050/players/${userInfo.favTeamName.toLowerCase()}`,
+        `${
+          process.env.REACT_APP_AUTH0_BASEURL
+        }/${userInfo.favTeamName.toLowerCase()}`,
       );
       console.log( axiosResponse );
       this.setState( {
@@ -49,28 +51,30 @@ class Players extends Component {
           <ScrollOnView reverse>
             <Container>
               <Row>
-
                 <h1 className='c-HeroSection__title'> </h1>
                 <Row>
                   {this.state.exists &&
-                      this.state.playersData.players.map( ( player, index ) => (
-                        <Card
-                          className='shadow rounded m-1'
-                          style={{ width: '100%' }}
-                          key={index}
-                        >
-                          <Card.Body style={{ padding: '0px', margin: '0px' }}>
-                            <Card.Img variant='top'src={player.player_image} alt='no data' />
+                    this.state.playersData.players.map( ( player, index ) => (
+                      <Card
+                        className='shadow rounded m-1'
+                        style={{ width: '100%' }}
+                        key={index}
+                      >
+                        <Card.Body style={{ padding: '0px', margin: '0px' }}>
+                          <Card.Img
+                            variant='top'
+                            src={player.player_image}
+                            alt='no data'
+                          />
 
-                            <Card.Text> {player.player_name} </Card.Text>
-                            <Card.Text>{player.player_number}</Card.Text>
-                            <Card.Text>{player.player_type}</Card.Text>
-                            <Card.Text></Card.Text>
-                          </Card.Body>
-                        </Card>
-                      ) )}
+                          <Card.Text> {player.player_name} </Card.Text>
+                          <Card.Text>{player.player_number}</Card.Text>
+                          <Card.Text>{player.player_type}</Card.Text>
+                          <Card.Text></Card.Text>
+                        </Card.Body>
+                      </Card>
+                    ) )}
                 </Row>
-
               </Row>
             </Container>
           </ScrollOnView>
