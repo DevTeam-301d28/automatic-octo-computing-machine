@@ -5,13 +5,15 @@ import { motion } from 'framer-motion';
 import ScrollOnView from '../../common/ScrollOnView';
 import { withAuth0 } from '@auth0/auth0-react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button,
+import {
+  Button,
   InputGroup,
   Container,
   Col,
   Row,
   FormControl,
-  Form,} from 'react-bootstrap';
+  Form,
+} from 'react-bootstrap';
 import axios from 'axios';
 import Team from './Team';
 
@@ -32,23 +34,21 @@ class Explore extends Component {
   getTeamsData = ( e ) => {
     e.preventDefault();
     console.log( 'here' );
-    let TeamsUrl = `https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t=${e.target.search.value}`;
+    let TeamsUrl = `https://myclub-1.herokuapp.com/lookupByName/${e.target.search.value}`;
     axios.get( TeamsUrl ).then( ( response ) => {
       console.log( response );
       this.setState( {
-        teamsData: response.data.teams,
+        teamsData: response.data,
       } );
       console.log( this.state.teamsData );
     } );
   };
 
-
-
   render() {
     return (
       <>
-        <Element name="scrollToExplore" />
-        <section className="c-TeamSection">
+        <Element name='scrollToExplore' />
+        <section className='c-TeamSection'>
           <ScrollOnView reverse>
             <Container>
               <motion.div
@@ -60,10 +60,16 @@ class Explore extends Component {
               >
                 <Row>
                   <Col>
-                    <Form onSubmit={( e ) => this.getTeamsData( e )}>
+                    <Form
+                      onSubmit={( e ) => this.getTeamsData( e )}
+                      className='form__group'
+                    >
+                      <label className='form__label'>
+                       Explore
+                      </label>
                       <InputGroup className='input'>
                         <FormControl
-                          placeholder="Search About Your Team"
+                          placeholder='Enter your team name'
                           aria-label="Recipient's username"
                           aria-describedby='basic-addon2'
                           name='search'
@@ -73,7 +79,7 @@ class Explore extends Component {
                           variant='outline-secondary'
                           id='button-addon2'
                         >
-                    Button
+                          Search
                         </Button>
                       </InputGroup>
                     </Form>
@@ -82,30 +88,27 @@ class Explore extends Component {
                 <Row>
                   <Col>
                     {this.state.teamsData.length > 0 &&
-                this.state.teamsData
-                  .splice( 0, 1 )
-                  .map( ( element, index ) => (
-                    <Team
-                      key={index}
-                      teamId={element.idTeam}
-                      teamName={element.strTeam}
-                      teamImage={element.strTeamBadge}
-                      strLeague={element.strLeague}
-                      idLeague={element.idLeague}
-                      strStadium={element.strStadium}
-                      strStadiumThumb={element.strStadiumThumb}
-                      strStadiumDescription={element.strStadiumDescription}
-                      strStadiumLocation={element.strStadiumLocation}
-                      intStadiumCapacity={element.intStadiumCapacity}
-                      strWebsite={element.strWebsite}
-                      strFacebook={element.strFacebook}
-                      strTwitter={element.strTwitter}
-                      strYoutube={element.strYoutube}
-                      strInstagram={element.strInstagram}
-                      strCountry={element.strCountry}
-                      description={element.strDescriptionEN}
-                    />
-                  ) )}
+                      this.state.teamsData
+                        .splice( 0, 1 )
+                        .map( ( element, index ) => (
+                          <Team
+                            key={index}
+                            teamId={element.strAllteamId}
+                            teamName={element.teamNameDetails}
+                            teamImage={element.teamImage}
+                            strLeague={element.leauge}
+                            strStadiumThumb={element.stadiumImg}
+                            strStadiumDescription={element.stadiumDescription}
+                            strStadiumLocation={element.strStadiumLocation}
+                            intStadiumCapacity={element.intStadiumCapacity}
+                            strWebsite={element.website}
+                            strFacebook={element.facebook}
+                            strTwitter={element.twitter}
+                            strYoutube={element.youtube}
+                            strCountry={element.country}
+                            description={element.description}
+                          />
+                        ) )}
                   </Col>
                 </Row>
               </motion.div>

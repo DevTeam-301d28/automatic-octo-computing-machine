@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { GiHamburgerMenu } from 'react-icons/gi';
+
 import NavLogo from './NavLogo';
 import NavLink from './NavLink';
 import './NavBar.css';
@@ -14,11 +15,7 @@ const MainNavBar = () => {
     { linkText: 'Explore', element: 'scrollToExplore' },
   ];
 
-  const ViewsLinks = [
-    { linkText: 'Club', element: 'scrollToClub' },
-    { linkText: 'Settings', element: 'scrollToLatestSettings' },
-    { linkText: 'logout', element: 'scrollTologout' },
-  ];
+  const ViewsLinks = [{ linkText: 'Account', element: 'scrollToAccount' }];
   const [isMobileOpen, setIsMobileOpen] = useState( false );
   // eslint-disable-next-line no-unused-vars
   const [isProfileOpen, setProfileOpen] = useState( false );
@@ -30,6 +27,10 @@ const MainNavBar = () => {
   const profileClicked = () => {
     setProfileOpen( true );
     setarrayOflinks( ViewsLinks );
+  };
+  const homeClicked = () => {
+    setProfileOpen( false );
+    setarrayOflinks( Homelinks );
   };
   const containerVariants = {
     visible: {
@@ -54,6 +55,7 @@ const MainNavBar = () => {
             <NavLogo
               linkClicked={linkClicked}
               profileClicked={profileClicked}
+              homeClicked={homeClicked}
             />
           </div>
           <div className='c-NavBar__right'>

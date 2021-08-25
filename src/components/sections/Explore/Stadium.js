@@ -5,7 +5,7 @@ export class Stadium extends Component {
   render() {
     const {
       intStadiumCapacity,
-      strStadium,
+
       strStadiumThumb,
       strCountry,
       strStadiumLocation,
@@ -15,47 +15,66 @@ export class Stadium extends Component {
       <Container>
         <Row>
           <Col>
-            <Card className='profile-card' style={{ width: '100%' }}>
+            <Card className='card m-4' style={{ width: '100%' }}>
+              <label>
+              </label>
               <Card.Img
-                className='img'
+                variant='top'
+                className='img pt-2'
                 src={strStadiumThumb}
-                alt={strStadium}
+                alt={'strStadium'}
                 style={{
-                  height: '250px',
-                  width: '250px',
-                  objectFit: 'contain',
+
+                  width: '100%',
+                  objectFit: 'cover',
                 }}
               />
               <Card.Body style={{ width: '100%' }}>
                 <ListGroup className='profile-social-links'>
-                  <ListGroup.Item>Stadium Name :{strStadium}</ListGroup.Item>
+                  <br></br>
+                  <label>
+
+                  </label>
                   <br></br>
                   <ListGroup.Item>Country :{strCountry}</ListGroup.Item>{' '}
                   <br></br>
                   <br></br>
-                  <ListGroup.Item>
-                    Stadium Location:{strStadiumLocation}
-                  </ListGroup.Item>
+                  <label>
+
+                  </label>
                   <br></br>
                   <ListGroup.Item>
-                    Stadium Capacity:{intStadiumCapacity}
+                    Stadium Location    :{strStadiumLocation}
                   </ListGroup.Item>
                   <br></br>
                 </ListGroup>
               </Card.Body>
             </Card>
           </Col>
-        </Row>
-        <Row>
-          <Card className='profile-card' style={{ width: '100%' }}>
-            <Card.Body>
-              <ListGroup className='profile-social-links'>
-                <ListGroup.Item className='profile-bio'>
-                  Stadium Description:{strStadiumDescription}
-                </ListGroup.Item>
-              </ListGroup>
-            </Card.Body>
-          </Card>
+          <Col>
+            <Card className='card m-4' style={{ width: '100%' }}>
+              <Card.Body>
+                <ListGroup className='profile-social-links'>
+                  <label>
+                    <h2 className='h'> About team stadium </h2>
+                  </label>
+                  <br></br>
+                  <br></br>
+                  <ListGroup.Item className='text-justify' >
+                    Stadium Description    {strStadiumDescription}
+                  </ListGroup.Item>
+                  <br></br>
+                  <label>
+                  </label>
+                  <br></br>
+                  <ListGroup.Item>
+                    Stadium Capacity   {intStadiumCapacity}
+                  </ListGroup.Item>
+                  <br></br>
+                </ListGroup>
+              </Card.Body>
+            </Card>
+          </Col>
         </Row>
       </Container>
     );

@@ -31,8 +31,8 @@ class Welcome extends Component {
       showModal: true,
       selectedSport: '',
       user: this.props.userdata,
+      events: [],
     };
-
   }
 
   componentDidMount = async () => {
@@ -53,30 +53,53 @@ class Welcome extends Component {
               console.log( 'inside didmount', response.data );
               console.log( response.data.selectedSport );
               if ( response.data.selectedSport === 'NA' ) {
-                this.setState( {isNew: true} );
+                this.setState( { isNew: true }
+                );
               }
               console.log( response.data );
               this.setState( {
                 userInfo: response.data,
               } );
-            }
-
-            )
+              localStorage.setItem(
+                'userInfo',
+                JSON.stringify( this.state.userInfo ),
+              );
+            } )
             .catch( ( error ) => console.log( error.message ) );
         } )
         .catch( ( error ) => console.log( error.message ) );
     }
+    this.getEvents();
   };
 
-  prepareRequiredData = () => {};
+  getEvents() {
+    let userInfo = JSON.parse( localStorage.getItem( 'userInfo' ) );
+    console.log( userInfo );
 
+    let config = {
+      method: 'get',
+      baseURL: process.env.REACT_APP_AUTH0_BASEURL,
+      url: `/teamEvents/${userInfo.favTeamId}`,
+    };
+
+    axios( config )
+      .then( ( response ) => {
+        console.log( response.data );
+        this.setState( {
+          events: response.data,
+        } );
+        console.log( response.data );
+      } )
+      .catch( ( error ) => console.log( error.message ) );
+
+  }
   render() {
     return (
       <Container
         fluid
         className='c-HeroSection flex flex-center flex-space-btw'
       >
-        {this.state.isNew && ( <SportModal stateData={this.state.userInfo} /> )}
+        {this.state.isNew && <SportModal stateData={this.state.userInfo} />}
         <Row>
           <Col></Col>
           <Col>
@@ -93,9 +116,13 @@ class Welcome extends Component {
             </section>
           </Col>
         </Row>
-        <Team />
-        <Players />
-        <Events stateData={this.state.userInfo}/>
+        <Team stateData={this.state.userInfo} />
+        <Players stateData={this.state.userInfo}/>
+        <Events
+          stateData={this.state.userInfo}
+          stateEvents={this.state.events}
+        />
+
         <Explore />
       </Container>
     );
