@@ -33,7 +33,6 @@ class SportModal extends Component {
   };
 
   handleSubmit = ( e ) => {
-
     const { nickname, favouriteleague, favTeamId, favTeamName, selectedSport } =
       this.state;
     console.log( nickname );
@@ -139,7 +138,6 @@ class SportModal extends Component {
     }
   };
   getTeamsData = ( value ) => {
-
     if ( this.props.auth0.isAuthenticated ) {
       this.props.auth0
         .getIdTokenClaims()

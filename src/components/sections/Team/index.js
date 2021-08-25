@@ -30,6 +30,7 @@ class Team extends Component {
         `https://myclub-1.herokuapp.com/lookupByName/${userInfo.favTeamName}`,
       );
       console.log( axiosResponse );
+
       this.setState( {
         myTeam: axiosResponse.data,
         exists: true,
@@ -37,7 +38,6 @@ class Team extends Component {
     } catch ( error ) {
       console.log( error );
     }
-    console.log( 'myTeam', this.state.myTeam[0] );
   };
 
   render() {
@@ -54,20 +54,19 @@ class Team extends Component {
               transition={{ duration: 0.8, delay: 1 }}
             >
               {this.state.exists &&
-                this.state.myTeam.splice( 0, 1 ).map( ( response ) => (
+                this.state.myTeam.map( ( response,index ) => (
                   <Card
                     className='card-profile shadow mt--300 px-8'
                     width='100%'
+                    key={index}
                   >
                     <Row className='justify-content-center'>
                       <Col className='order-lg-2 card-profile-image'>
-                        <a href='#pablo' onClick={( e ) => e.preventDefault()}>
-                          <img
-                            alt='...'
-                            className='rounded-circle mt-4'
-                            src={response.teamImage}
-                          />
-                        </a>
+                        <img
+                          alt='...'
+                          className='rounded-circle mt-4'
+                          src={response.teamImage}
+                        />
                       </Col>
                     </Row>
                     <div className='text-center mt-5'>

@@ -53,8 +53,7 @@ class Welcome extends Component {
               console.log( 'inside didmount', response.data );
               console.log( response.data.selectedSport );
               if ( response.data.selectedSport === 'NA' ) {
-                this.setState( { isNew: true }
-                );
+                this.setState( { isNew: true } );
               }
               console.log( response.data );
               this.setState( {
@@ -91,8 +90,9 @@ class Welcome extends Component {
         console.log( response.data );
       } )
       .catch( ( error ) => console.log( error.message ) );
-
   }
+
+
   render() {
     return (
       <Container
@@ -117,12 +117,11 @@ class Welcome extends Component {
           </Col>
         </Row>
         <Team stateData={this.state.userInfo} />
-        <Players stateData={this.state.userInfo}/>
+        <Players stateData={this.state.userInfo} />
         <Events
           stateData={this.state.userInfo}
           stateEvents={this.state.events}
         />
-
         <Explore />
       </Container>
     );
