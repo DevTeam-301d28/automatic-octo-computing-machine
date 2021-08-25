@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Form, Button, Row, Col, Card } from 'react-bootstrap';
+import { Form, Button, Row, Col, Card,Alert } from 'react-bootstrap';
 import DropdownList from 'react-widgets/DropdownList';
 import { FormGroup } from 'reactstrap';
 import countriesdata from '../sections/Hero/Modal/res/countries.json';
+import './ProfileView.css';
 import { withAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 export class UpdateData extends Component {
@@ -16,8 +17,44 @@ export class UpdateData extends Component {
       favTeamName: '',
       favouriteleague: '',
       favTeamId: '',
+      userInfo:'',
+      patchMsg:'',
+      showlert:false
     };
   }
+  componentDidMount = async () => {
+    if ( this.props.auth0.isAuthenticated ) {
+      this.props.auth0
+        .getIdTokenClaims()
+        .then( ( res ) => {
+          let jwt = res.__raw;
+          let config = {
+            headers: { Authorization: 'Bearer ' + jwt },
+            method: 'get',
+            baseURL: process.env.REACT_APP_AUTH0_BASEURL,
+            url: '/checkJwt',
+          };
+          axios( config )
+            .then( ( response ) => {
+              console.log( 'inside didmount', response.data );
+              console.log( response.data.selectedSport );
+              if ( response.data.selectedSport === 'NA' ) {
+                this.setState( { isNew: true } );
+              }
+              console.log( response.data );
+              this.setState( {
+                userInfo: response.data,
+              } );
+              localStorage.setItem(
+                'userInfo',
+                JSON.stringify( this.state.userInfo ),
+              );
+            } )
+            .catch( ( error ) => console.log( error.message ) );
+        } )
+        .catch( ( error ) => console.log( error.message ) );
+    }
+  };
   nameHandler = async ( e ) => {
     let name = e.target.value;
     this.setState( { nickname: name } );
@@ -27,6 +64,8 @@ export class UpdateData extends Component {
       selectedSport: value,
     } );
     console.log( this.state.selectedSport );
+    console.log( this.state.userInfo );
+
     // this._next();
   };
 
@@ -101,7 +140,7 @@ export class UpdateData extends Component {
     console.log( this.state );
     axios
       .patch(
-        `${process.env.REACT_APP_AUTH0_BASEURL}/updateUser/${this.props.stateData._id}`,
+        `https://myclub-1.herokuapp.com/updateUser/${this.state.userInfo._id}`,
         {
           favTeamId,
           favTeamName,
@@ -111,8 +150,11 @@ export class UpdateData extends Component {
         },
       )
       .then( ( resp ) => {
+        this.setState( {patchMsg: resp.data.message,showlert:true} );
         console.log( resp.data );
       } );
+    setTimeout( () => {
+      this.setState( {showlert:false} ); }, 3000 );
   };
   render() {
     return (
@@ -207,6 +249,12 @@ export class UpdateData extends Component {
                 >
                   Submit
                 </Button>
+                {
+                  this.state.showlert &&
+                <Alert className="alert" variant="success" style={{margin:'10px'}}>
+                  User {this.state.patchMsg}.
+                </Alert>
+                }
               </Form>
             </Row>
           </div>
