@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import ScrollOnView from '../../common/ScrollOnView';
 
 import { withAuth0 } from '@auth0/auth0-react';
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
 import axios from 'axios';
 
 const variants = {
@@ -44,7 +44,7 @@ class Team extends Component {
     return (
       <>
         <Element name='scrollToTeam' />
-        <section className="c-ProfileSection">
+        <section className='c-ProfileSection'>
           <ScrollOnView reverse>
             <motion.div
               className='c-HeroSection__content flex flex-col'
@@ -53,47 +53,43 @@ class Team extends Component {
               variants={variants}
               transition={{ duration: 0.8, delay: 1 }}
             >
-
-
               {this.state.exists &&
-                  this.state.myTeam.splice( 0, 1 ).map( ( response ) => (
-                    <Card
-                      className='card-profile shadow mt--300 px-8'
-                      width='100%'
-                    >
-                      <Row className='justify-content-center'>
-                        <Col className='order-lg-2 card-profile-image'>
-                          <a href='#pablo' onClick={( e ) => e.preventDefault()}>
-                            <img
-                              alt='...'
-                              className='rounded-circle mt-4'
-                              src={response.teamImage}
-                            />
-                          </a>
-                        </Col>
-                      </Row>
-                      <div className='text-center mt-5'>
-                        <h3>{response.teamNameDetails}</h3>
-                        <div className='h6 font-weight-300'>
-                          <i className='ni location_pin mr-2' />
-                          Amman, Jordan
-                        </div>
-                        <div className='h6 mt-4'>
-                          <i className='ni business_briefcase-24 mr-2' />
-                          {response.formedYear}
-                        </div>
-                        <div>
-                          <i className='ni education_hat mr-2' />
-                          {response.strStadiumLocation}
-                        </div>
+                this.state.myTeam.splice( 0, 1 ).map( ( response ) => (
+                  <Card
+                    className='card-profile shadow mt--300 px-8'
+                    width='100%'
+                  >
+                    <Row className='justify-content-center'>
+                      <Col className='order-lg-2 card-profile-image'>
+                        <a href='#pablo' onClick={( e ) => e.preventDefault()}>
+                          <img
+                            alt='...'
+                            className='rounded-circle mt-4'
+                            src={response.teamImage}
+                          />
+                        </a>
+                      </Col>
+                    </Row>
+                    <div className='text-center mt-5'>
+                      <h3>{response.teamNameDetails}</h3>
+                      <div className='h6 font-weight-300'>
+                        <i className='ni location_pin mr-2' />
+                        Amman, Jordan
                       </div>
-                      <div className='mt-5 py-5 border-top text-center'>
-                        <Row className='justify-content-center'></Row>
+                      <div className='h6 mt-4'>
+                        <i className='ni business_briefcase-24 mr-2' />
+                        {response.formedYear}
                       </div>
-                    </Card>
-                  ) )}
-
-
+                      <div>
+                        <i className='ni education_hat mr-2' />
+                        {response.strStadiumLocation}
+                      </div>
+                    </div>
+                    <div className='mt-5 py-5 border-top text-center'>
+                      <Row className='justify-content-center'></Row>
+                    </div>
+                  </Card>
+                ) )}
             </motion.div>
           </ScrollOnView>
         </section>
