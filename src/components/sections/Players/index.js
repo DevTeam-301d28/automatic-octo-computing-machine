@@ -5,7 +5,7 @@ import ScrollOnView from '../../common/ScrollOnView';
 import { withAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 
-import { Container, Row, Card } from 'react-bootstrap';
+import { Container, Row, Card, Col } from 'react-bootstrap';
 
 class Players extends Component {
   constructor( props ) {
@@ -21,11 +21,10 @@ class Players extends Component {
     console.log( userInfo );
     try {
       let axiosResponse = await axios.get(
-        `${
-          process.env.REACT_APP_AUTH0_BASEURL
-        }/${userInfo.favTeamName.toLowerCase()}`,
+        `
+        https://myclub-1.herokuapp.com/players/${userInfo.favTeamName.toLowerCase()}`,
       );
-      console.log( axiosResponse );
+      console.log( 'players', axiosResponse );
       this.setState( {
         playersData: axiosResponse.data[0],
         exists: true,
@@ -49,12 +48,11 @@ class Players extends Component {
         <Element name='scrollToLatestPlayers' />
         <section className='c-TeamSection'>
           <ScrollOnView reverse>
-            <Container>
+            <Container fluid>
               <Row>
-                <h1 className='c-HeroSection__title'> </h1>
-                <Row>
-                  {this.state.exists &&
-                    this.state.playersData.players.map( ( player, index ) => (
+                {this.state.exists &&
+                  this.state.playersData.players.map( ( player, index ) => (
+                    <Col>
                       <Card
                         className='shadow rounded m-1'
                         style={{ width: '100%' }}
@@ -73,8 +71,8 @@ class Players extends Component {
                           <Card.Text></Card.Text>
                         </Card.Body>
                       </Card>
-                    ) )}
-                </Row>
+                    </Col>
+                  ) )}
               </Row>
             </Container>
           </ScrollOnView>

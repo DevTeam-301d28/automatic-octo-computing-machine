@@ -31,8 +31,6 @@ class Explore extends Component {
     };
   }
 
-
-
   render() {
     return (
       <>
@@ -53,9 +51,7 @@ class Explore extends Component {
                       onSubmit={( e ) => this.getTeamsData( e )}
                       className='form__group'
                     >
-                      <label className='form__label'>
-                       Explore
-                      </label>
+                      <label className='form__label'>Explore</label>
                       <InputGroup className='input'>
                         <FormControl
                           placeholder='Enter your team name'
