@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import { Form, Button, Row, Col, Card,Alert } from 'react-bootstrap';
+import {
+  Form,
+  Button,
+  Row,
+  Col,
+  Card,
+  Alert,
+  Container,
+} from 'react-bootstrap';
 import DropdownList from 'react-widgets/DropdownList';
 import { FormGroup } from 'reactstrap';
 import countriesdata from '../sections/Hero/Modal/res/countries.json';
@@ -17,9 +25,9 @@ export class UpdateData extends Component {
       favTeamName: '',
       favouriteleague: '',
       favTeamId: '',
-      userInfo:'',
-      patchMsg:'',
-      showlert:false
+      userInfo: '',
+      patchMsg: '',
+      showlert: false,
     };
   }
   componentDidMount = async () => {
@@ -150,116 +158,130 @@ export class UpdateData extends Component {
         },
       )
       .then( ( resp ) => {
-        this.setState( {patchMsg: resp.data.message,showlert:true} );
+        this.setState( { patchMsg: resp.data.message, showlert: true } );
         console.log( resp.data );
       } );
     setTimeout( () => {
-      this.setState( {showlert:false} ); }, 3000 );
+      this.setState( { showlert: false } );
+    }, 3000 );
   };
   render() {
     return (
-      <div className='formDiv'>
-        <Card
-          className='card-profile shadow mt--300 px-8'
-          style={{ width: '100%' }}
-        >
-          <Card.Title>
-            <h2 className='c-ProfileSection__title'>
-              Select Your Favourite Sport
-            </h2>
-          </Card.Title>
-          <div className='mt-5 py-5 border-top text-center'>
-            <Row className='justify-content-center'>
-              <Form>
-                <FormGroup>
-                  <Row>
-                    <div className='w-100'>
-                      <br />
-                    </div>
-                    <Col>
-                      <img
-                        onClick={( e ) => this.sportSelected( 'basket' )}
-                        src='https://static.toiimg.com/thumb/msid-70661134,imgsize-761205,width-800,height-600,resizemode-75/70661134.jpg'
-                        width='50%'
-                        alt='sports'
-                      />
-                    </Col>
-                    <Col>
-                      <img
-                        onClick={( e ) => this.sportSelected( 'soccer' )}
-                        src='https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg'
-                        width='50%'
-                        alt='sports'
-                      />
-                    </Col>
-                    <div className='w-100'>
-                      <br />
-                    </div>
-                  </Row>
-                </FormGroup>
+      <Container>
+        <Row>
+          <Col>
+            <div className='formDiv'>
+              <Card
+                className='card-profile shadow mt--300 px-8'
+                style={{ width: '100%' }}
+              >
+                <Card.Title className="justify-content-center pt-4">Select Your Favourite Sport</Card.Title>
+                <div className='mt-5 py-5 border-top text-center'>
+                  <Row className='justify-content-center'>
+                    <Form>
+                      <FormGroup>
+                        <Row>
+                          <div className='w-100'>
+                            <br />
+                          </div>
+                          <Col>
+                            <img
+                              onClick={( e ) => this.sportSelected( 'basket' )}
+                              src='https://static.toiimg.com/thumb/msid-70661134,imgsize-761205,width-800,height-600,resizemode-75/70661134.jpg'
+                              width='50%'
+                              alt='sports'
+                            />
+                          </Col>
+                          <Col>
+                            <img
+                              onClick={( e ) => this.sportSelected( 'soccer' )}
+                              src='https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg'
+                              width='50%'
+                              alt='sports'
+                            />
+                          </Col>
+                          <div className='w-100'>
+                            <br />
+                          </div>
+                        </Row>
+                      </FormGroup>
+                      <Col className='text-center justify-content-center ml-50 mr-50' >
 
-                <Form.Group className='mb-3' controlId='formBasicPassword'>
-                  <Form.Label className='labels'>
-                    select your preferences
-                  </Form.Label>
-                  <DropdownList
-                    data={countriesdata}
-                    dataKey='id'
-                    textField='name'
-                    defaultValue={'select country'}
-                    as='button'
-                    onChange={( e ) => this.getLeaguesData( e )}
-                  />
-                </Form.Group>
-                <Form.Group className='mb-3' controlId='formBasicCheckbox'>
-                  <DropdownList
-                    data={this.state.leaguesData}
-                    dataKey='leagueId'
-                    textField='leagueName'
-                    defaultValue={'Select League'}
-                    as='button'
-                    onChange={( e ) => this.getTeamsData( e )}
-                  />
-                </Form.Group>
-                <Form.Group className='mb-3' controlId='formBasicCheckbox'>
-                  <DropdownList
-                    data={this.state.allTeamsData}
-                    dataKey='strAllteamId'
-                    textField='teamNameDetails'
-                    defaultValue={'Select Team'}
-                    as='button'
-                    onChange={( e ) => this.getOneTeamData( e )}
-                    disabled={['', ' ']}
-                  />
-                </Form.Group>
-                <Form.Group className='mb-3' controlId='formBasicEmail'>
-                  <Form.Label className='labels'>Update Your Data</Form.Label>
-                  <Form.Control
-                    type='text'
-                    placeholder='Enter nickName'
-                    onChange={( e ) => {
-                      this.nameHandler( e );
-                    }}
-                  />
-                </Form.Group>
-                <Button
-                  variant='primary'
-                  type='submit'
-                  onClick={( e ) => this.handleSubmit( e )}
-                >
-                  Submit
-                </Button>
-                {
-                  this.state.showlert &&
-                <Alert className="alert" variant="success" style={{margin:'10px'}}>
-                  User {this.state.patchMsg}.
-                </Alert>
-                }
-              </Form>
-            </Row>
-          </div>
-        </Card>
-      </div>
+                        <Form.Group
+
+                        >
+                          <DropdownList
+                            data={countriesdata}
+                            dataKey='id'
+                            textField='name'
+                            defaultValue={'select country'}
+                            as='button'
+                            onChange={( e ) => this.getLeaguesData( e )}
+                          />
+                        </Form.Group>
+                        <Form.Group
+
+                        >
+                          <DropdownList
+                            data={this.state.leaguesData}
+                            dataKey='leagueId'
+                            textField='leagueName'
+                            defaultValue={'Select League'}
+                            as='button'
+                            onChange={( e ) => this.getTeamsData( e )}
+                          />
+                        </Form.Group>
+                        <Form.Group
+
+                        >
+                          <DropdownList
+                            data={this.state.allTeamsData}
+                            dataKey='strAllteamId'
+                            textField='teamNameDetails'
+                            defaultValue={'Select Team'}
+                            as='button'
+                            onChange={( e ) => this.getOneTeamData( e )}
+                            disabled={['', ' ']}
+                          />
+                        </Form.Group>
+                        <Form.Group >
+                          <Form.Label className='labels'>
+                          Update Your Data
+                          </Form.Label>
+                          <Form.Control
+                            type='text'
+                            placeholder='Enter nickName'
+                            onChange={( e ) => {
+                              this.nameHandler( e );
+                            }}
+                          />
+                        </Form.Group>
+
+                      </Col>
+                      <Button
+                        variant='primary'
+                        type='submit'
+                        onClick={( e ) => this.handleSubmit( e )}
+                      >
+                        Submit
+                      </Button>
+                      {this.state.showlert && (
+                        <Alert
+                          className='alert'
+                          variant='success'
+                          style={{ margin: '10px' }}
+                        >
+                          User {this.state.patchMsg}.
+                        </Alert>
+                      )}
+                    </Form>
+                  </Row>
+                </div>
+              </Card>
+            </div>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }

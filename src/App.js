@@ -12,7 +12,6 @@ import { withAuth0 } from '@auth0/auth0-react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Welcome from 'components/sections/Hero/Welcome';
 
-
 class App extends React.Component {
   render() {
     console.log( 'app', this.props );
@@ -28,7 +27,6 @@ class App extends React.Component {
                     <main>
                       <Route exact path='/'>
                         <Welcome />
-
                       </Route>
                       <Route exact path='/profile'>
                         <Profile />

@@ -3,10 +3,8 @@ import { Element } from 'react-scroll';
 import './TeamSection.css';
 import ScrollOnView from '../../common/ScrollOnView';
 import { withAuth0 } from '@auth0/auth0-react';
-import axios from 'axios';
 
 import { Container, Row, Card, Col } from 'react-bootstrap';
-
 class Players extends Component {
   constructor( props ) {
     super( props );
@@ -16,33 +14,30 @@ class Players extends Component {
     };
   }
 
-  componentDidMount = async () => {
-    let userInfo = JSON.parse( localStorage.getItem( 'userInfo' ) );
-    console.log( userInfo );
-    try {
-      let axiosResponse = await axios.get(
-        `
-        https://myclub-1.herokuapp.com/players/${userInfo.favTeamName.toLowerCase()}`,
-      );
-      console.log( 'players', axiosResponse );
-      this.setState( {
-        playersData: axiosResponse.data[0],
-        exists: true,
-      } );
-    } catch ( error ) {
-      console.log( error );
-    }
-  };
 
-  // renderPlayersData() {
-  //   console.clear();
-  //   let topPlayers = this.state.playersData;
-  //   console.log( 'theFunction', topPlayers );
-  //   console.log( 'theFunction', topPlayers.players );
-  //   return topPlayers;
-  // }
+  checkImageUrl( url ){
+  // create an XHR object
+    const xhr = new XMLHttpRequest();
+
+    // listen for `onload` event
+    xhr.onload = () => {
+      if ( xhr.status === 200 ) {
+        return url;
+      } else {
+        return 'https://store.juventus.com/data/store/product/4/47060/product.jpg';
+      }
+    };
+
+    // create a `HEAD` request
+    xhr.open( 'HEAD', url );
+
+    // send request
+    xhr.send();
+  }
 
   render() {
+    const { myTeamPlayers } = this.props;
+    console.log( 'players' , myTeamPlayers[0].players );
     return (
       <>
         <Element name='scrollToLatestPlayers' />
@@ -50,8 +45,8 @@ class Players extends Component {
           <ScrollOnView reverse>
             <Container fluid>
               <Row>
-                {this.state.exists &&
-                  this.state.playersData.players.map( ( player, index ) => (
+                {
+                  myTeamPlayers[0].players.map( ( player, index ) => (
                     <Col>
                       <Card
                         className='shadow rounded m-1'
@@ -62,9 +57,9 @@ class Players extends Component {
                           <Card.Img
                             variant='top'
                             src={player.player_image}
-                            alt='no data'
+                            // onError={}
+                            alt={'no photo'}
                           />
-
                           <Card.Text> {player.player_name} </Card.Text>
                           <Card.Text>{player.player_number}</Card.Text>
                           <Card.Text>{player.player_type}</Card.Text>

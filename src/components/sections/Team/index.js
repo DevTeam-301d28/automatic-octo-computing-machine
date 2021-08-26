@@ -6,8 +6,7 @@ import { motion } from 'framer-motion';
 import ScrollOnView from '../../common/ScrollOnView';
 
 import { withAuth0 } from '@auth0/auth0-react';
-import { Row, Col, Card } from 'react-bootstrap';
-import axios from 'axios';
+import { Row, Col, Card,Container } from 'react-bootstrap';
 
 const variants = {
   hidden: { opacity: 0, y: -200 },
@@ -19,32 +18,22 @@ class Team extends Component {
     super( props );
     this.state = {
       myTeam: [],
-      exists: false,
     };
   }
-  componentDidMount = async () => {
-    let userInfo = JSON.parse( localStorage.getItem( 'userInfo' ) );
-    console.log( userInfo );
-    try {
-      let axiosResponse = await axios.get(
-        `https://myclub-1.herokuapp.com/lookupByName/${userInfo.favTeamName}`,
-      );
-      console.log( axiosResponse );
-
-      this.setState( {
-        myTeam: axiosResponse.data,
-        exists: true,
-      } );
-    } catch ( error ) {
-      console.log( error );
+  checklogo( teamName,logo ){
+    if ( teamName.toLowerCase() === 'juventus' ){
+      return 'https://creativereview.imgix.net/content/uploads/2017/01/Juve-sq.jpg';
+    }else{
+      return logo;
     }
-  };
-
+  }
   render() {
-    return (
+    const { myTeam } = this.props;
+    console.log( 'myTeam', myTeam );
+    return(
       <>
         <Element name='scrollToTeam' />
-        <section className='c-ProfileSection'>
+        <section className='c-TeamSection c-TeamSection__background'>
           <ScrollOnView reverse>
             <motion.div
               className='c-HeroSection__content flex flex-col'
@@ -53,42 +42,77 @@ class Team extends Component {
               variants={variants}
               transition={{ duration: 0.8, delay: 1 }}
             >
-              {this.state.exists &&
-                this.state.myTeam.map( ( response,index ) => (
-                  <Card
-                    className='card-profile shadow mt--300 px-8'
-                    width='100%'
-                    key={index}
-                  >
-                    <Row className='justify-content-center'>
-                      <Col className='order-lg-2 card-profile-image'>
-                        <img
-                          alt='...'
-                          className='rounded-circle mt-4'
-                          src={response.teamImage}
-                        />
-                      </Col>
-                    </Row>
-                    <div className='text-center mt-5'>
-                      <h3>{response.teamNameDetails}</h3>
-                      <div className='h6 font-weight-300'>
-                        <i className='ni location_pin mr-2' />
-                        Amman, Jordan
-                      </div>
-                      <div className='h6 mt-4'>
-                        <i className='ni business_briefcase-24 mr-2' />
-                        {response.formedYear}
-                      </div>
-                      <div>
-                        <i className='ni education_hat mr-2' />
-                        {response.strStadiumLocation}
-                      </div>
-                    </div>
-                    <div className='mt-5 py-5 border-top text-center'>
-                      <Row className='justify-content-center'></Row>
-                    </div>
-                  </Card>
-                ) )}
+              <Container>
+                <Row>
+                  <Col>
+                    {
+                      <Card
+                        className='card-profile shadow mt--300 px-8'
+
+                        key={'1'}
+
+                      >
+                        <Row className='justify-content-center'>
+                          <Col className='order-lg-2 '>
+                            <Card.Img
+                              variant='top'
+                              alt='...'
+                              className='mt-0'
+                              src={this.checklogo( myTeam[0].strTeamName , myTeam[0].strTeamLogo ) }
+                              width="50%"
+                            />
+                          </Col>
+                        </Row>
+                        <div className='text-center mt-5'>
+                          <h3>{myTeam[0].strTeamName}</h3>
+                          <div className='h6 font-weight-300'>
+                            <i className='ni location_pin mr-2' />
+                            {myTeam[0].strFormedYear}
+                          </div>
+                          <div className='h6 mt-4'>
+                            <i className='ni business_briefcase-24 mr-2' />
+                            {myTeam[0].strLeagueName}
+                          </div>
+
+                          <Card.Text className='mb-4' >
+                            {myTeam[0].strStadiumInfo[0]}
+                          </Card.Text>
+                          <Card.Text className='mb-4' >
+                            {myTeam[0].strTeamCountry}
+                          </Card.Text>
+                        </div>
+                      </Card>
+                    }
+                  </Col>
+                  <Col>
+                    {
+                      <Card
+                        className='card-profile shadow mt--300 px-8'
+
+                        key={'1'}
+
+                      >
+                        <Row className='justify-content-center'>
+                          <Card.Img
+
+                            variant='top'
+                            alt='...'
+                            className='mt-4'
+                            src={myTeam[0].strTeamJersey}
+                            width="50%"
+                          />
+
+                        </Row>
+                        <div className='text-center mt-5'>
+                          <h3>{myTeam[0].currentSeason}</h3>
+
+                        </div>
+                      </Card>
+                    }
+                  </Col>
+                </Row>
+              </Container>
+
             </motion.div>
           </ScrollOnView>
         </section>

@@ -1,11 +1,11 @@
 .c-TeamSection {
   min-height: 100vh;
-  padding-top: 100px;
+  padding-top: 10px;
   padding-bottom: 100px;
   justify-content: center;
   align-items: center;
   text-align: center;
-  flex-direction: column;
+  flex-direction: row;
 }
 
 .c-TeamSection__background {

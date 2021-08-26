@@ -26,10 +26,10 @@ class Events extends Component {
 
   renderCards() {
     let topFiveEvents = [];
-    if ( this.props.stateEvents.length > 5 ) {
-      topFiveEvents = this.props.stateEvents.length.splice( 0, 4 );
+    if ( this.props.myTeamEvents.length > 5 ) {
+      topFiveEvents = this.props.stateEvents.length.splice( 0, 5 );
     } else {
-      topFiveEvents = this.props.stateEvents;
+      topFiveEvents = this.props.myTeamEvents;
     }
     return topFiveEvents.map( ( event, index ) => (
       <Card
