@@ -34,7 +34,7 @@ class Explore extends Component {
   getTeamsData = ( e ) => {
     e.preventDefault();
     console.log( 'here' );
-    let TeamsUrl = `https://myclub-1.herokuapp.com/lookupByName/${e.target.search.value}`;
+    let TeamsUrl = `${process.env.REACT_APP_AUTH0_BASEURL}/lookupByName/${e.target.search.value}`;
     axios.get( TeamsUrl ).then( ( response ) => {
       console.log( response );
       this.setState( {
@@ -91,20 +91,20 @@ class Explore extends Component {
                         .map( ( element, index ) => (
                           <Team
                             key={index}
-                            teamId={element.strAllteamId}
-                            teamName={element.teamNameDetails}
-                            teamImage={element.teamImage}
-                            strLeague={element.leauge}
-                            strStadiumThumb={element.stadiumImg}
-                            strStadiumDescription={element.stadiumDescription}
-                            strStadiumLocation={element.strStadiumLocation}
-                            intStadiumCapacity={element.intStadiumCapacity}
-                            strWebsite={element.website}
-                            strFacebook={element.facebook}
-                            strTwitter={element.twitter}
-                            strYoutube={element.youtube}
-                            strCountry={element.country}
-                            description={element.description}
+                            teamId={element.teamId}
+                            teamName={element.strTeamName}
+                            teamImage={element.strTeamBadge}
+                            strLeague={element.strLeagueName}
+                            strStadiumThumb={element.strStadiumInfo[1]}
+                            strStadiumDescription={element.strStadiumInfo[2]}
+                            strStadiumLocation={element.strStadiumInfo[3]}
+                            intStadiumCapacity={element.strStadiumInfo[4]}
+                            strWebsite={element.strTeamLinks[0]}
+                            strFacebook={element.strTeamLinks[1]}
+                            strTwitter={element.strTeamLinks[2]}
+                            strYoutube={element.strTeamLinks[3]}
+                            strCountry={element.strTeamCountry}
+                            description={element.strTeamDescriptionEN}
                           />
                         ) )}
                   </Col>
