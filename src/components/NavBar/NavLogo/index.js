@@ -11,7 +11,7 @@ import {
   DropdownItem,
   DropdownMenu,
 } from 'reactstrap';
-
+import swal from 'sweetalert';
 const NavLogo = ( { linkClicked, profileClicked, homeClicked } ) => {
   // eslint-disable-next-line no-unused-vars
   const [isProfileOpen, setProfileOpen] = useState( false );
@@ -60,7 +60,7 @@ const NavLogo = ( { linkClicked, profileClicked, homeClicked } ) => {
         >
           Settings
         </DropdownItem>
-        <DropdownItem to='/TheClub' tag={Link} onClick={() => profileClicked()}>
+        <DropdownItem to='/' tag={Link} onClick={() => swal( 'Comming Soon!.' )}>
           FansClub
         </DropdownItem>
         <DropdownItem

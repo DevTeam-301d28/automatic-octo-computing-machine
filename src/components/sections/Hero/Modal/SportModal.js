@@ -6,6 +6,7 @@ import countriesdata from './res/countries.json';
 import axios from 'axios';
 import DropdownList from 'react-widgets/DropdownList';
 import 'react-widgets/styles.css';
+import swal from 'sweetalert';
 class SportModal extends Component {
   constructor( props ) {
     super( props );
@@ -19,55 +20,10 @@ class SportModal extends Component {
       favouriteleague: '',
       favTeamName: '',
       favTeamId: 0,
-      showModal: true,
       selectedSport: '',
       user: this.props.stateData,
     };
   }
-
-  handleChange = ( e ) => {
-    const { name, value } = e.target;
-    this.setState( {
-      [name]: value,
-    } );
-  };
-
-  handleSubmit = ( e ) => {
-    const { nickname, favouriteleague, favTeamId, favTeamName, selectedSport } =
-      this.state;
-    console.log( nickname );
-    axios
-      .patch(
-        `${process.env.REACT_APP_AUTH0_BASEURL}/updateUser/${this.props.stateData._id}`,
-        {
-          favTeamId,
-          favTeamName,
-          nickname,
-          favouriteleague,
-          selectedSport,
-        },
-      )
-      .then( ( resp ) => {
-        console.log( resp.data );
-      } );
-    this.handleClose();
-  };
-
-  _next = () => {
-    let currentStep = this.state.currentStep;
-    currentStep = currentStep >= 2 ? 3 : currentStep + 1;
-    this.setState( {
-      currentStep: currentStep,
-    } );
-  };
-
-  _prev = () => {
-    let currentStep = this.state.currentStep;
-    currentStep = currentStep <= 1 ? 1 : currentStep - 1;
-    this.setState( {
-      currentStep: currentStep,
-    } );
-  };
 
   previousButton() {
     let currentStep = this.state.currentStep;
@@ -101,17 +57,28 @@ class SportModal extends Component {
     return null;
   }
 
+  _next = () => {
+    let currentStep = this.state.currentStep;
+    currentStep = currentStep >= 2 ? 3 : currentStep + 1;
+    this.setState( {
+      currentStep: currentStep,
+    } );
+  };
+
+  _prev = () => {
+    let currentStep = this.state.currentStep;
+    currentStep = currentStep <= 1 ? 1 : currentStep - 1;
+    this.setState( {
+      currentStep: currentStep,
+    } );
+  };
+
   sportSelected = ( sport ) => {
     this.setState( {
       selectedSport: sport,
     } );
     this._next();
   };
-  handleClose = () => {
-    this.setState( { showModal: false } );
-  };
-
-  //// Api Requests
   getLeaguesData = async ( value ) => {
     console.log( value.name );
     if ( this.props.auth0.isAuthenticated ) {
@@ -174,54 +141,92 @@ class SportModal extends Component {
     );
     this._next();
   };
+  handleChange = ( e ) => {
+    const { name, value } = e.target;
+    this.setState( {
+      [name]: value,
+    } );
+  };
+
+  handleSubmit = ( e ) => {
+    e.preventDefault();
+    const { nickname, favouriteleague, favTeamId, favTeamName, selectedSport } =
+      this.state;
+    axios
+      .patch(
+        `${process.env.REACT_APP_AUTH0_BASEURL}/updateUser/${e.target.id}`,
+        {
+          favTeamId,
+          favTeamName,
+          nickname,
+          favouriteleague,
+          selectedSport,
+        },
+      )
+      .then( ( resp ) => {
+        swal( resp.message ).then( ( value ) => {
+
+        } );
+      } )
+      .catch( ( err ) => {
+        swal( err );
+      } );
+    this.handleClose();
+  };
+
+  handleClose = () => {
+    this.setState( { showModal: false } );
+    window.location.href = window.location.origin;
+  };
 
   render() {
+    const { userInfo } = this.props;
     return (
       <>
         {!this.props.auth0.loading && (
-          <>
-            <Modal className='modal' show={this.state.showModal}>
-              <Modal.Header>
-                <Modal.Title className='modal-title'>Account</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <Container fluid='md text-center'>
-                  {/*
-                   */}
-                  <Row>
-                    <Col>
-                      <p>Step {this.state.currentStep} </p>
+          <Modal className='modal' show={true}>
+            <Modal.Header>
+              <Modal.Title className='justify-content-center text-center'>
+                Account
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Container fluid='md text-center'>
+                <Row>
+                  <Col>
+                    <p>Step {this.state.currentStep} </p>
 
-                      <form onSubmit={this.handleSubmit}>
-                        <Step1
-                          currentStep={this.state.currentStep}
-                          sportSelected={this.sportSelected}
-                        />
-                        <Step2
-                          currentStep={this.state.currentStep}
-                          getLeaguesData={this.getLeaguesData}
-                          leaguesData={this.state.leaguesData}
-                          getTeamsData={this.getTeamsData}
-                          allTeamsData={this.state.allTeamsData}
-                          getOneTeamData={this.getOneTeamData}
-                          favTeamName={this.state.favTeamName}
-                        />
-                        <Step3
-                          currentStep={this.state.currentStep}
-                          handleChange={this.handleChange}
-                          nickname={this.state.nickname}
-                        />
-                      </form>
-                    </Col>
-                  </Row>
-                </Container>
-              </Modal.Body>
-              <Modal.Footer>
-                {this.previousButton()}
-                {this.nextButton()}
-              </Modal.Footer>
-            </Modal>
-          </>
+                    <form onSubmit={this.handleSubmit} id={userInfo._id}>
+                      <Step1
+                        currentStep={this.state.currentStep}
+                        sportSelected={this.sportSelected}
+                        userInfo={userInfo}
+                      />
+                      <Step2
+                        currentStep={this.state.currentStep}
+                        getLeaguesData={this.getLeaguesData}
+                        leaguesData={this.state.leaguesData}
+                        getTeamsData={this.getTeamsData}
+                        allTeamsData={this.state.allTeamsData}
+                        getOneTeamData={this.getOneTeamData}
+                        favTeamName={this.state.favTeamName}
+                      />
+                      <Step3
+                        currentStep={this.state.currentStep}
+                        handleChange={this.handleChange}
+                        nickname={this.state.nickname}
+                        userInfo={userInfo}
+                      />
+                    </form>
+                  </Col>
+                </Row>
+              </Container>
+            </Modal.Body>
+            <Modal.Footer>
+              {this.previousButton()}
+              {this.nextButton()}
+            </Modal.Footer>
+          </Modal>
         )}
       </>
     );
@@ -229,38 +234,42 @@ class SportModal extends Component {
 }
 
 function Step1( props ) {
-  if ( props.currentStep !== 1 ) {
-    return null;
+  if ( !( props.userInfo._id ) ) {
+    window.location.href = window.location.origin;
+  } else {
+    if ( props.currentStep !== 1 ) {
+      return null;
+    }
+    return (
+      <>
+        <Row>
+          <Col>Select Your Favourite Sport </Col>
+          <div className='w-100'>
+            <br />
+          </div>
+          <Col>
+            <img
+              onClick={() => props.sportSelected( 'basketball' )}
+              src='https://static.toiimg.com/thumb/msid-70661134,imgsize-761205,width-800,height-600,resizemode-75/70661134.jpg'
+              className='card-img'
+              alt='sports'
+            />
+          </Col>
+          <Col>
+            <img
+              onClick={() => props.sportSelected( 'soccer' )}
+              src='https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg'
+              className='card-img'
+              alt='sports'
+            />
+          </Col>
+          <div className='w-100'>
+            <br />
+          </div>
+        </Row>
+      </>
+    );
   }
-  return (
-    <>
-      <Row>
-        <Col>Select Your Favourite Sport </Col>
-        <div className='w-100'>
-          <br />
-        </div>
-        <Col>
-          <img
-            onClick={() => props.sportSelected( 'basketball' )}
-            src='https://static.toiimg.com/thumb/msid-70661134,imgsize-761205,width-800,height-600,resizemode-75/70661134.jpg'
-            className='card-img'
-            alt='sports'
-          />
-        </Col>
-        <Col>
-          <img
-            onClick={() => props.sportSelected( 'soccer' )}
-            src='https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg'
-            className='card-img'
-            alt='sports'
-          />
-        </Col>
-        <div className='w-100'>
-          <br />
-        </div>
-      </Row>
-    </>
-  );
 }
 
 function Step2( props ) {

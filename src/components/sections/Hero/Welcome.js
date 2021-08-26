@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import { motion } from 'framer-motion';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { withAuth0 } from '@auth0/auth0-react';
 import { getConfig } from 'configs/config';
 import axios from 'axios';
@@ -21,21 +22,25 @@ class Welcome extends Component {
     this.state = {
       userInfo: '',
       isNew: false,
-      currentStep: 1,
+      content: false,
+      showModal: false,
+      myTeam: [],
+      showTeam: false,
+      myTeamPlayers: [],
+      showPlayers: false,
+      events: [],
+      showEvents: false,
       leaguesData: [],
       allTeamsData: [],
       nickname: '',
       favouriteleague: '',
       favTeamName: '',
       favTeamId: 0,
-      showModal: true,
       selectedSport: '',
-      user: this.props.userdata,
-      events: [],
     };
   }
 
-  componentDidMount = async () => {
+  componentDidMount = () => {
     if ( this.props.auth0.isAuthenticated ) {
       this.props.auth0
         .getIdTokenClaims()
@@ -50,48 +55,84 @@ class Welcome extends Component {
           };
           axios( config )
             .then( ( response ) => {
-              console.log( 'inside didmount', response.data );
-              console.log( response.data.selectedSport );
-              if ( response.data.selectedSport === 'NA' ) {
-                this.setState( { isNew: true } );
-              }
-              console.log( response.data );
               this.setState( {
                 userInfo: response.data,
               } );
-              localStorage.setItem(
-                'userInfo',
-                JSON.stringify( this.state.userInfo ),
-              );
+              console.log( 'this One', this.state.userInfo );
+              this.checkdata();
             } )
             .catch( ( error ) => console.log( error.message ) );
         } )
         .catch( ( error ) => console.log( error.message ) );
     }
-    this.getEvents();
   };
 
-  getEvents() {
+  checkdata() {
+    console.log( 'checkdata', this.state.userInfo );
+    if ( this.state.userInfo.selectedSport === 'NA' ) {
+      this.setState( {
+        isNew: true,
+      } );
+    } else {
+      this.setState( {
+        isNew: false,
+        content: true,
+      } );
+      this.getTeamDetails();
+    }
+  }
+
+  getTeamDetails = async () => {
+    try {
+      let axiosResponse = await axios.get(
+        `${process.env.REACT_APP_AUTH0_BASEURL}/lookupByName/${this.state.userInfo.favTeamName}`,
+      );
+      this.setState( {
+        myTeam: axiosResponse.data,
+        showTeam: true,
+      } );
+    } catch ( error ) {
+      console.log( error );
+    }
+    this.getPlayersDetails();
+  };
+  getPlayersDetails = async () => {
+    try {
+      let axiosResponse = await axios.get(
+        `${
+          process.env.REACT_APP_AUTH0_BASEURL
+        }/players/${this.state.userInfo.favTeamName.toLowerCase()}`,
+      );
+      this.setState( {
+        myTeamPlayers: axiosResponse.data,
+        showPlayers: true,
+      } );
+      console.log( this.state.myTeamPlayers );
+    } catch ( error ) {
+      console.log( error );
+    }
+    this.getEventsDetails();
+  };
+
+  getEventsDetails() {
     let userInfo = JSON.parse( localStorage.getItem( 'userInfo' ) );
     console.log( userInfo );
-
     let config = {
       method: 'get',
       baseURL: process.env.REACT_APP_AUTH0_BASEURL,
       url: `/teamEvents/${userInfo.favTeamId}`,
     };
-
     axios( config )
       .then( ( response ) => {
         console.log( response.data );
         this.setState( {
           events: response.data,
+          showEvents: true,
         } );
         console.log( response.data );
       } )
       .catch( ( error ) => console.log( error.message ) );
   }
-
 
   render() {
     return (
@@ -99,30 +140,21 @@ class Welcome extends Component {
         fluid
         className='c-HeroSection flex flex-center flex-space-btw'
       >
-        {this.state.isNew && <SportModal stateData={this.state.userInfo} />}
-        <Row>
-          <Col></Col>
-          <Col>
-            <section>
-              <motion.div
-                className='c-HeroSection__content flex flex-col'
-                initial='hidden'
-                animate='visible'
-                variants={variants}
-                transition={{ duration: 0.8, delay: 1 }}
-              >
-                <p className='c-HeroSection__paragraph'></p>
-              </motion.div>
-            </section>
-          </Col>
-        </Row>
-        <Team stateData={this.state.userInfo} />
-        <Players stateData={this.state.userInfo} />
-        <Events
-          stateData={this.state.userInfo}
-          stateEvents={this.state.events}
-        />
-        <Explore />
+        {this.state.isNew && <SportModal userInfo={this.state.userInfo} />}
+        {this.state.content && (
+          <>
+            {this.state.showTeam && <Team myTeam={this.state.myTeam} />}
+            {this.state.showPlayers && (
+              <Players myTeamPlayers={this.state.myTeamPlayers} />
+            )}
+            {this.state.showEvents && (
+              <>
+                <Events myTeamEvents={this.state.events} />
+                <Explore />
+              </>
+            )}
+          </>
+        )}
       </Container>
     );
   }
