@@ -115,21 +115,17 @@ class Welcome extends Component {
   };
 
   getEventsDetails() {
-    let userInfo = JSON.parse( localStorage.getItem( 'userInfo' ) );
-    console.log( userInfo );
     let config = {
       method: 'get',
       baseURL: process.env.REACT_APP_AUTH0_BASEURL,
-      url: `/teamEvents/${userInfo.favTeamId}`,
+      url: `/teamEvents/${this.state.userInfo.favTeamId}`,
     };
     axios( config )
       .then( ( response ) => {
-        console.log( response.data );
         this.setState( {
           events: response.data,
           showEvents: true,
         } );
-        console.log( response.data );
       } )
       .catch( ( error ) => console.log( error.message ) );
   }

@@ -34,7 +34,7 @@ class Explore extends Component {
   getTeamsData = ( e ) => {
     e.preventDefault();
     console.log( 'here' );
-    let TeamsUrl = `https://myclub-1.herokuapp.com/lookupByName/${e.target.search.value}`;
+    let TeamsUrl = `${process.env.REACT_APP_AUTH0_BASEURL}/lookupByName/${e.target.search.value}`;
     axios.get( TeamsUrl ).then( ( response ) => {
       console.log( response );
       this.setState( {
